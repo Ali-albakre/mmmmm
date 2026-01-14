@@ -20,7 +20,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.7'
+          flutter-version: '3.38.6'
           channel: 'stable'
           cache: true
 
@@ -46,23 +46,20 @@ jobs:
             exit 1
           }
 
-          # Determine version tag
+          # Determine version
           if ("${{ github.event.inputs.version }}") {
-            # Manual release version
             $version = "v${{ github.event.inputs.version }}"
           }
           elseif ("${{ github.ref }}" -like "refs/tags/*") {
-            # Extract tag name from refs/tags/v1.2.3
             $ref = "${{ github.ref }}"
             $version = $ref.Replace("refs/tags/", "")
           }
           else {
-            # Fallback version
             $version = "v${{ github.run_number }}"
           }
 
-          # Rename APK (NEW NAME)
-          $newName = "jeetk-$version.apk"
+          # Rename APK → PharmaLedger+ version
+          $newName = "PharmaLedger+-$version.apk"
           $newPath = Join-Path $apk.DirectoryName $newName
           Rename-Item $apk.FullName $newPath -Force
 
@@ -101,12 +98,12 @@ jobs:
         with:
           name: app-release
 
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.get_tag.outputs.tag_name }}
-          name: Release ${{ steps.get_tag.outputs.tag_name }}
-          body: "Automated release for version ${{ steps.get_tag.outputs.tag_name }}"
+          name: PharmaLedger+ ${{ steps.get_tag.outputs.tag_name }}
+          body: "Automated release for PharmaLedger+ version ${{ steps.get_tag.outputs.tag_name }}"
           files: "*.apk"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
