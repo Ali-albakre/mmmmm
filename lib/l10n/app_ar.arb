@@ -1,0 +1,23 @@
+{
+  "@@locale": "ar",
+  "appTitle": "İÇÑãÇ áíÏÌÑ",
+  "onboardingTitle": "ãÑÍÈğÇ",
+  "onboardingSubtitle": "ÍÏÏ ÇááÛÉ æÇáÚãáÉ ÇáÇİÊÑÇÖíÉ ææÖÚ ÇáãÎÒæä.",
+  "chooseLanguage": "ÇááÛÉ",
+  "chooseCurrency": "ÇáÚãáÉ ÇáÇİÊÑÇÖíÉ",
+  "chooseInventoryMode": "æÖÚ ÇáãÎÒæä",
+  "inventorySimple": "ãÈÓØ (ÈÏæä ãÎÒæä)",
+  "inventoryFull": "ãÎÒæä ßÇãá",
+  "currencyYER": "ÑíÇá íãäí",
+  "currencySAR": "ÑíÇá ÓÚæÏí",
+  "languageArabic": "ÇáÚÑÈíÉ",
+  "languageEnglish": "ÇáÅäÌáíÒíÉ",
+  "continueLabel": "ãÊÇÈÚÉ",
+  "dashboardTitle": "áæÍÉ ÇáÊÍßã",
+  "dashboardSales": "ÇáãÈíÚÇÊ",
+  "dashboardPurchases": "ÇáãÔÊÑíÇÊ",
+  "dashboardExpenses": "ÇáãÕÑæİÇÊ",
+  "dashboardExpiryAlerts": "ÊäÈíåÇÊ ÇäÊåÇÁ ÇáÕáÇÍíÉ",
+  "emptyStateNoData": "áÇ ÊæÌÏ ÈíÇäÇÊ ÈÚÏ",
+  "settingsTitle": "ÇáÅÚÏÇÏÇÊ"
+}

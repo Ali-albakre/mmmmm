@@ -1,0 +1,23 @@
+{
+  "@@locale": "en",
+  "appTitle": "PharmaLedger",
+  "onboardingTitle": "Welcome",
+  "onboardingSubtitle": "Set your preferred language, currency, and inventory mode.",
+  "chooseLanguage": "Language",
+  "chooseCurrency": "Default currency",
+  "chooseInventoryMode": "Inventory mode",
+  "inventorySimple": "Simple (no stock)",
+  "inventoryFull": "Full inventory",
+  "currencyYER": "YER",
+  "currencySAR": "SAR",
+  "languageArabic": "Arabic",
+  "languageEnglish": "English",
+  "continueLabel": "Continue",
+  "dashboardTitle": "Dashboard",
+  "dashboardSales": "Sales",
+  "dashboardPurchases": "Purchases",
+  "dashboardExpenses": "Expenses",
+  "dashboardExpiryAlerts": "Expiry alerts",
+  "emptyStateNoData": "No data yet",
+  "settingsTitle": "Settings"
+}
