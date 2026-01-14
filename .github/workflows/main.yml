@@ -1,0 +1,112 @@
+name: Build APK and Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., 1.3.2)"
+        required: false
+        default: ""
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: 'stable'
+          cache: true
+
+      - name: Verify Flutter environment
+        run: |
+          flutter --version
+          flutter doctor
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Find and rename APK
+        id: rename_apk
+        shell: pwsh
+        run: |
+          # Find the APK
+          $apk = Get-ChildItem -Path "build" -Filter "*.apk" -Recurse | Select-Object -First 1
+          if (-not $apk) {
+            Write-Host "Could not find APK file"
+            exit 1
+          }
+
+          # Determine version tag
+          if ("${{ github.event.inputs.version }}") {
+            # Manual release version
+            $version = "v${{ github.event.inputs.version }}"
+          }
+          elseif ("${{ github.ref }}" -like "refs/tags/*") {
+            # Extract tag name from refs/tags/v1.2.3
+            $ref = "${{ github.ref }}"
+            $version = $ref.Replace("refs/tags/", "")
+          }
+          else {
+            # Fallback version
+            $version = "v${{ github.run_number }}"
+          }
+
+          # Rename APK (NEW NAME)
+          $newName = "jeetk-$version.apk"
+          $newPath = Join-Path $apk.DirectoryName $newName
+          Rename-Item $apk.FullName $newPath -Force
+
+          # Export outputs
+          echo "APK_PATH=$newPath" >> $env:GITHUB_OUTPUT
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: ${{ steps.rename_apk.outputs.APK_PATH }}
+
+  publish-release:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Get tag name
+        id: get_tag
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ github.event.inputs.version }}" ]]; then
+            echo "tag_name=v${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            tag_name="${GITHUB_REF#refs/tags/}"
+            echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
+          else
+            echo "tag_name=v${{ github.run_number }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-release
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_tag.outputs.tag_name }}
+          name: Release ${{ steps.get_tag.outputs.tag_name }}
+          body: "Automated release for version ${{ steps.get_tag.outputs.tag_name }}"
+          files: "*.apk"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
