@@ -1,6 +1,6 @@
-{
+﻿{
   "@@locale": "en",
-  "appTitle": "PharmaLedger",
+  "appTitle": "Smart Accounting",
   "onboardingTitle": "Welcome",
   "onboardingSubtitle": "Set your preferred language, currency, and inventory mode.",
   "chooseLanguage": "Language",
@@ -18,6 +18,277 @@
   "dashboardPurchases": "Purchases",
   "dashboardExpenses": "Expenses",
   "dashboardExpiryAlerts": "Expiry alerts",
+  "dashboardLastUpdated": "Last updated: {date}",
+  "@dashboardLastUpdated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardPeriodDaily": "Daily",
+  "dashboardPeriodWeekly": "Weekly",
+  "dashboardPeriodMonthly": "Monthly",
+  "dashboardCurrentAgency": "Current agency",
+  "dashboardLastUpdatedShort": "Last updated {time} ago",
+  "@dashboardLastUpdatedShort": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardScanDocument": "Scan document",
+  "dashboardNetBalance": "Net balance",
+  "dashboardTotalPurchases": "Total purchases",
+  "dashboardReturns": "Returns",
+  "dashboardDisbursements": "Disbursements",
+  "dashboardExportReport": "Export report",
+  "dashboardAddManual": "Add manual entry",
+  "dashboardHelp": "Help center",
+  "dashboardManageAgency": "Manage agency",
+  "dashboardRecentOperations": "Recent operations",
+  "dashboardViewAll": "View all",
+  "dashboardColumnDocument": "Document",
+  "dashboardColumnType": "Type",
+  "dashboardColumnDate": "Date",
+  "dashboardColumnNumber": "No.",
+  "dashboardNoAgencyTitle": "No agency selected yet",
+  "dashboardNoAgencySubtitle": "Create your first agency to start tracking transactions.",
+  "dashboardSelectAgency": "Select agency",
+  "dashboardSampleAgencyName": "Advanced Tech Agency",
+  "dashboardSampleUpdatedTime": "5 min",
+  "scanTitle": "Scan document",
+  "scanSubtitle": "Choose a source to capture the document.",
+  "scanFromCamera": "Camera",
+  "scanFromCameraHint": "Capture a new photo.",
+  "scanFromGallery": "Gallery",
+  "scanFromGalleryHint": "Pick one or more photos.",
+  "scanFromPdf": "PDF file",
+  "scanFromPdfHint": "Import a PDF document.",
+  "pdfReviewTitle": "PDF pages",
+  "pdfReviewProcessing": "Preparing PDF pages and extracting data...",
+  "pdfReviewNoPages": "No pages found in the PDF.",
+  "pdfReviewPageLabel": "Page {index}",
+  "@pdfReviewPageLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfReviewOpenEntry": "Open entry",
+  "scanContinue": "Continue",
+  "scanClearSelection": "Clear",
+  "scanSelectedImages": "Selected images: {count}",
+  "@scanSelectedImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanSelectedPdf": "Selected PDF file",
+  "scanError": "Could not complete the request: {message}",
+  "@scanError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "manualEntryTitle": "Manual entry",
+  "manualEntryDetailsTitle": "Transaction details",
+  "manualEntryOcrTitle": "OCR extraction",
+  "manualEntryOcrInProgress": "Extracting data from the document...",
+  "manualEntryOcrPdfNotice": "PDF OCR is not available yet. Please enter details manually.",
+  "manualEntryOcrFailed": "Could not extract data. Please enter details manually.",
+  "manualEntryOcrFailedReason": "Reason: {message}",
+  "@manualEntryOcrFailedReason": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "manualEntryOcrNoData": "No extractable data found yet.",
+  "manualEntryOcrInvoice": "Invoice: {value}",
+  "@manualEntryOcrInvoice": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "manualEntryOcrDate": "Date: {value}",
+  "@manualEntryOcrDate": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "manualEntryOcrTotal": "Total: {value}",
+  "@manualEntryOcrTotal": {
+    "placeholders": {
+      "value": {
+        "type": "num"
+      }
+    }
+  },
+  "manualEntryInvoiceNumber": "Invoice number (optional)",
+  "manualEntryAmount": "Amount",
+  "manualEntryAmountRequired": "Amount is required.",
+  "manualEntryAmountInvalid": "Enter a valid amount.",
+  "manualEntryCurrency": "Invoice currency",
+  "manualEntryDate": "Transaction date",
+  "manualEntryDateRequired": "Select a transaction date.",
+  "manualEntryExchangeRate": "Exchange rate to base currency",
+  "manualEntryExchangeRateRequired": "Enter a valid exchange rate.",
+  "manualEntryTransactionType": "Invoice type",
+  "manualEntryTransactionTypeRequired": "Select an invoice type.",
+  "manualEntryNotes": "Notes (optional)",
+  "manualEntrySave": "Save entry",
+  "manualEntrySaveDraft": "Save draft",
+  "manualEntryPost": "Post entry",
+  "manualEntryConfirmTitle": "Confirm save",
+  "manualEntryConfirmMessage": "This will save the entry and update the dashboard.",
+  "manualEntryCancel": "Cancel",
+  "manualEntryConfirm": "Confirm",
+  "manualEntrySaved": "Entry saved.",
+  "manualEntryNoAgency": "Please select an agency before saving.",
+  "transactionTypePurchase": "Purchase",
+  "transactionTypeReturn": "Return",
+  "transactionTypeDisbursement": "Disbursement",
+  "transactionTypeOpening": "Opening balance",
+  "transactionTypePurchaseCredit": "Purchase (credit)",
+  "transactionTypePayment": "Payment",
+  "transactionTypeOpeningBalance": "Opening balance",
+  "transactionTypePurchaseCash": "Purchase (cash)",
+  "transactionTypeCompensation": "Compensation",
+  "transactionStatusPosted": "Posted",
+  "transactionStatusDraft": "Draft",
+  "reportsTitle": "Reports",
+  "reportsSetupTitle": "Generate report",
+  "reportsTypeLabel": "Report type",
+  "reportsTypeStatement": "Statement",
+  "reportsTypeMonthlySummary": "Monthly summary",
+  "reportsTypePurchases": "Purchases",
+  "reportsTypePurchasesCredit": "Purchases (credit)",
+  "reportsTypePayments": "Payments",
+  "reportsTypeReturns": "Returns",
+  "reportsTypePurchasesCash": "Purchases (cash)",
+  "reportsTypeCompensation": "Compensation",
+  "reportsPeriodLabel": "Period",
+  "reportsPeriodHint": "Select period",
+  "reportsFormatPdf": "PDF",
+  "reportsFormatExcel": "Excel",
+  "reportsGenerate": "Generate report",
+  "reportsGenerating": "Generating...",
+  "reportsTableTitle": "Report table",
+  "reportsColumnAmount": "Amount",
+  "reportsNoDataToExport": "No data to export.",
+  "reportsExportFailed": "Failed to export report.",
+  "reportsSaved": "Report saved: {path}",
+  "@reportsSaved": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsCreatedNoFile": "Report created, but no file was saved yet.",
+  "reportsRecentTitle": "Recent reports",
+  "reportsEmpty": "No reports generated yet.",
+  "helpTitle": "Help center",
+  "helpAccuracyTitle": "How accurate is OCR?",
+  "helpAccuracyBody": "Accuracy depends on image clarity. Use clear, well-lit scans for best results.",
+  "helpCorrectionsTitle": "How do I correct extracted data?",
+  "helpCorrectionsBody": "Use the manual edit screen to fix fields before posting the transaction.",
+  "helpDuplicatesTitle": "How are duplicates detected?",
+  "helpDuplicatesBody": "We check invoice number, date, and amount to flag possible duplicates.",
+  "helpReportsTitle": "How do I export reports?",
+  "helpReportsBody": "Choose a report type, period, and format, then generate the report from the Reports screen.",
+  "agenciesTitle": "Agencies",
+  "agenciesEmpty": "No agencies yet. Add your first agency to start tracking balances.",
+  "agenciesCreate": "Add agency",
+  "agenciesName": "Agency name",
+  "agenciesOpeningBalanceLabel": "Opening balance",
+  "agenciesPrimaryCurrency": "Primary currency",
+  "agenciesAllowedCurrencies": "Allowed currencies",
+  "agenciesOpeningBalanceDate": "Opening balance date",
+  "agenciesOpeningBalanceDateInvalid": "Opening balance must be dated on Jan 1.",
+  "agenciesSave": "Save agency",
+  "agenciesOpeningBalance": "Opening balance: {amount}",
+  "@agenciesOpeningBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "num"
+      }
+    }
+  },
+  "recentOperationsTitle": "Recent operations",
+  "recentOperationsEmpty": "No operations yet.",
+  "drawerDashboard": "Dashboard",
+  "drawerScan": "Scan document",
+  "drawerManualEntry": "Manual entry",
+  "drawerReports": "Reports",
+  "drawerAgencies": "Agencies",
+  "drawerHelp": "Help center",
+  "drawerSettings": "Settings",
+  "dashboardQuickActions": "Quick actions",
+  "dashboardActionNewEntry": "New entry",
+  "dashboardActionInvoice": "Invoice",
+  "dashboardActionChart": "Chart of accounts",
+  "dashboardActionLedger": "Ledger",
+  "dashboardActionArchive": "Archive",
+  "dashboardActionBackup": "Backup",
+  "dashboardAlerts": "Alerts",
+  "dashboardNoAlerts": "No alerts yet",
+  "dashboardCharts": "Charts",
+  "dashboardNoCharts": "No charts yet",
+  "dashboardRecentEntries": "Recent entries",
+  "dashboardNoRecentEntries": "No entries yet",
+  "dashboardNoCards": "No cards to show",
+  "dashboardCustomize": "Customize dashboard",
+  "dashboardSectionQuickActions": "Show quick actions",
+  "dashboardSectionAlerts": "Show alerts",
+  "dashboardSectionCharts": "Show charts",
+  "dashboardSectionRecent": "Show recent entries",
+  "dashboardViewDetails": "Details: {title}",
+  "@dashboardViewDetails": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCopyValue": "Copy value",
+  "dashboardCopyTitle": "Copy title",
   "emptyStateNoData": "No data yet",
+  "settingsBackupTitle": "Backup",
+  "settingsDriveBackupToggle": "Daily Google Drive backup",
+  "settingsDriveBackupHint": "Upload a backup file to Drive at the end of each day.",
+  "settingsDriveAccountTitle": "Google Drive account",
+  "settingsDriveAccountSubtitle": "Connect a Google account to store backups.",
+  "settingsDriveAccountConnected": "Connected",
+  "settingsConnect": "Connect",
+  "settingsDisconnect": "Disconnect",
+  "settingsLastBackup": "Last backup",
+  "settingsBackupNow": "Backup now",
+  "settingsBackupInProgress": "Backing up...",
+  "settingsBackupFailed": "Backup failed: {message}",
+  "@settingsBackupFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsOcrTitle": "OCR",
+  "settingsOcrCloudToggle": "Use OCR.space cloud OCR",
+  "settingsOcrCloudHint": "Sends images to OCR.space for better accuracy.",
   "settingsTitle": "Settings"
 }
+
+

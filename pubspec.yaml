@@ -1,4 +1,4 @@
-name: mmmmm
+﻿name: mmmmm
 description: "PharmaLedger - Offline-first pharmacy accounting."
 publish_to: 'none'
 version: 1.0.0+1
@@ -16,9 +16,20 @@ dependencies:
   equatable: ^2.0.5
   get_it: ^7.7.0
   go_router: ^14.1.4
-  intl: ^0.19.0
+  intl: ^0.20.2
   logger: ^2.4.0
+  google_mlkit_text_recognition: ^0.15.0
+  image_picker: ^1.1.2
+  file_picker: ^8.1.2
+  path_provider: ^2.1.1
+  path: ^1.9.0
+  pdf: ^3.11.0
+  pdfx: ^2.6.0
+  excel: ^4.0.2
   shared_preferences: ^2.3.2
+  google_sign_in: ^6.2.1
+  googleapis: ^12.0.0
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +39,8 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/languages/
+    - .env
+

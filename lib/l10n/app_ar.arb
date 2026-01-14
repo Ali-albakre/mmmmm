@@ -1,23 +1,309 @@
-{
+﻿{
   "@@locale": "ar",
-  "appTitle": "����� �����",
-  "onboardingTitle": "������",
-  "onboardingSubtitle": "��� ����� ������� ���������� ���� �������.",
-  "chooseLanguage": "�����",
-  "chooseCurrency": "������ ����������",
-  "chooseInventoryMode": "��� �������",
-  "inventorySimple": "���� (���� �����)",
-  "inventoryFull": "����� ����",
-  "currencyYER": "���� ����",
-  "currencySAR": "���� �����",
-  "languageArabic": "�������",
-  "languageEnglish": "����������",
-  "continueLabel": "������",
-  "dashboardTitle": "���� ������",
-  "dashboardSales": "��������",
-  "dashboardPurchases": "���������",
-  "dashboardExpenses": "���������",
-  "dashboardExpiryAlerts": "������� ������ ��������",
-  "emptyStateNoData": "�� ���� ������ ���",
-  "settingsTitle": "���������"
+  "appTitle": "المحاسب الذكي",
+  "onboardingTitle": "مرحبًا",
+  "onboardingSubtitle": "حدد اللغة والعملة الافتراضية ووضع المخزون.",
+  "chooseLanguage": "اللغة",
+  "chooseCurrency": "العملة الافتراضية",
+  "chooseInventoryMode": "وضع المخزون",
+  "inventorySimple": "مبسط (بدون مخزون)",
+  "inventoryFull": "مخزون كامل",
+  "currencyYER": "ريال يمني",
+  "currencySAR": "ريال سعودي",
+  "languageArabic": "العربية",
+  "languageEnglish": "الإنجليزية",
+  "continueLabel": "متابعة",
+  "dashboardTitle": "لوحة التحكم",
+  "dashboardSales": "المبيعات",
+  "dashboardPurchases": "المشتريات",
+  "dashboardExpenses": "المصروفات",
+  "dashboardExpiryAlerts": "تنبيهات انتهاء الصلاحية",
+  "dashboardLastUpdated": "آخر تحديث: {date}",
+  "@dashboardLastUpdated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardPeriodDaily": "يومي",
+  "dashboardPeriodWeekly": "أسبوعي",
+  "dashboardPeriodMonthly": "شهري",
+  "dashboardCurrentAgency": "الوكالة الحالية",
+  "dashboardLastUpdatedShort": "آخر تحديث منذ {time}",
+  "@dashboardLastUpdatedShort": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardScanDocument": "مسح مستند",
+  "dashboardNetBalance": "صافي الرصيد",
+  "dashboardTotalPurchases": "إجمالي المشتريات",
+  "dashboardReturns": "المرتجعات",
+  "dashboardDisbursements": "سندات الصرف",
+  "dashboardExportReport": "تصدير تقرير",
+  "dashboardAddManual": "إضافة يدوية",
+  "dashboardHelp": "المساعدة",
+  "dashboardManageAgency": "إدارة الوكالة",
+  "dashboardRecentOperations": "آخر العمليات",
+  "dashboardViewAll": "عرض الكل",
+  "dashboardColumnDocument": "المستند",
+  "dashboardColumnType": "نوع العملية",
+  "dashboardColumnDate": "التاريخ",
+  "dashboardColumnNumber": "رقم الفاتورة",
+  "dashboardNoAgencyTitle": "لا توجد وكالة محددة بعد",
+  "dashboardNoAgencySubtitle": "أنشئ أول وكالة للبدء في تتبع العمليات.",
+  "dashboardSelectAgency": "اختيار الوكالة",
+  "dashboardSampleAgencyName": "وكالة التقنية المتقدمة",
+  "dashboardSampleUpdatedTime": "5 دقائق",
+  "scanTitle": "مسح مستند",
+  "scanSubtitle": "اختر المصدر لالتقاط المستند.",
+  "scanFromCamera": "الكاميرا",
+  "scanFromCameraHint": "التقاط صورة جديدة.",
+  "scanFromGallery": "المعرض",
+  "scanFromGalleryHint": "اختيار صورة أو أكثر.",
+  "scanFromPdf": "ملف PDF",
+  "scanFromPdfHint": "استيراد مستند PDF.",
+  "scanContinue": "متابعة",
+  "scanClearSelection": "مسح",
+  "scanSelectedImages": "عدد الصور المختارة: {count}",
+  "@scanSelectedImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanSelectedPdf": "تم اختيار ملف PDF",
+  "scanError": "تعذر إكمال الطلب: {message}",
+  "@scanError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "manualEntryTitle": "إضافة يدوية",
+  "manualEntryDetailsTitle": "تفاصيل العملية",
+  "manualEntryOcrTitle": "نتائج المسح",
+  "manualEntryOcrInProgress": "جارٍ استخراج البيانات من المستند...",
+  "manualEntryOcrPdfNotice": "استخراج PDF غير متاح حاليًا، يرجى إدخال البيانات يدويًا.",
+  "manualEntryOcrFailedReason": "السبب: {message}",
+  "@manualEntryOcrFailedReason": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },  "manualEntryOcrFailed": "تعذر استخراج البيانات، يرجى الإدخال يدويًا.",
+  "manualEntryOcrNoData": "لم يتم العثور على بيانات واضحة بعد.",
+  "manualEntryOcrInvoice": "رقم الفاتورة: {value}",
+  "@manualEntryOcrInvoice": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "manualEntryOcrDate": "التاريخ: {value}",
+  "@manualEntryOcrDate": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "manualEntryOcrTotal": "الإجمالي: {value}",
+  "@manualEntryOcrTotal": {
+    "placeholders": {
+      "value": {
+        "type": "num"
+      }
+    }
+  },
+  "manualEntryInvoiceNumber": "رقم الفاتورة (اختياري)",
+  "manualEntryAmount": "المبلغ",
+  "manualEntryAmountRequired": "المبلغ مطلوب.",
+  "manualEntryAmountInvalid": "أدخل مبلغًا صحيحًا.",
+  "manualEntryDate": "تاريخ العملية",
+  "manualEntryDateRequired": "اختر تاريخ العملية.",
+  "manualEntryTransactionType": "نوع الفاتورة",  "manualEntryTransactionTypeRequired": "اختر نوع الفاتورة.",
+  "manualEntryNotes": "ملاحظات (اختياري)",
+  "manualEntrySave": "حفظ العملية",
+  "manualEntryConfirmTitle": "تأكيد الحفظ",
+  "manualEntryConfirmMessage": "سيتم حفظ العملية وتحديث لوحة التحكم.",
+  "manualEntryCancel": "إلغاء",
+  "manualEntryConfirm": "تأكيد",
+  "manualEntrySaved": "تم حفظ العملية.",
+  "manualEntryNoAgency": "يرجى اختيار وكالة قبل الحفظ.",
+  "transactionTypePurchase": "مشتريات",
+  "transactionTypeReturn": "مرتجع",
+  "transactionTypeDisbursement": "سند صرف",
+  "transactionTypeOpening": "رصيد افتتاحي",
+  "transactionTypePurchaseCredit": "شراء آجل",
+  "transactionTypePayment": "دفعة/سند قبض",
+  "transactionTypeOpeningBalance": "قيد افتتاحي",
+  "transactionTypePurchaseCash": "شراء نقدي",
+  "transactionTypeCompensation": "تعويض/بونص",
+  "reportsTitle": "التقارير",
+  "reportsSetupTitle": "إنشاء تقرير",
+  "reportsTypeLabel": "نوع التقرير",
+  "reportsTypeStatement": "كشف حساب تفصيلي",
+  "reportsTypeMonthlySummary": "ملخص شهري",
+  "reportsTypePurchases": "المشتريات فقط",
+  "reportsTypePurchasesCredit": "المشتريات الآجلة",
+  "reportsTypePayments": "السداد/الدفعات",
+  "reportsTypeReturns": "المرتجعات فقط",
+  "reportsTypePurchasesCash": "المشتريات النقدية",
+  "reportsTypeCompensation": "التعويضات/البونص",
+  "reportsPeriodLabel": "الفترة",
+  "reportsPeriodHint": "اختر الفترة",
+  "reportsFormatPdf": "PDF",
+  "reportsFormatExcel": "Excel",
+  "reportsGenerate": "إنشاء التقرير",
+  "reportsGenerating": "جارٍ إنشاء التقرير...",
+  "reportsTableTitle": "جدول التقرير",
+  "reportsColumnAmount": "المبلغ",
+  "reportsNoDataToExport": "لا توجد بيانات للتصدير.",
+  "reportsExportFailed": "تعذر تصدير التقرير.",
+  "reportsSaved": "تم حفظ التقرير: {path}",
+  "@reportsSaved": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsCreatedNoFile": "تم إنشاء التقرير، لكن لم يتم حفظ الملف بعد.",
+  "reportsRecentTitle": "آخر التقارير",
+  "reportsEmpty": "لا توجد تقارير بعد.",
+  "helpTitle": "مركز المساعدة",
+  "helpAccuracyTitle": "ما مدى دقة OCR؟",
+  "helpAccuracyBody": "تعتمد الدقة على جودة الصورة. استخدم صورًا واضحة وبإضاءة جيدة.",
+  "helpCorrectionsTitle": "كيف أصحح البيانات المستخرجة؟",
+  "helpCorrectionsBody": "يمكنك تعديل الحقول يدويًا قبل ترحيل العملية.",
+  "helpDuplicatesTitle": "كيف يتم كشف التكرار؟",
+  "helpDuplicatesBody": "نستخدم رقم الفاتورة والتاريخ والمبلغ لاكتشاف التكرار المحتمل.",
+  "helpReportsTitle": "كيف أصدّر التقارير؟",
+  "helpReportsBody": "اختر نوع التقرير والفترة والصيغة ثم أنشئ التقرير من شاشة التقارير.",
+  "agenciesTitle": "الوكالات",
+  "agenciesEmpty": "لا توجد وكالات بعد. أضف وكالتك الأولى للبدء.",
+  "agenciesCreate": "إضافة وكالة",
+  "agenciesName": "اسم الوكالة",
+  "agenciesOpeningBalanceLabel": "الرصيد الافتتاحي",
+  "agenciesSave": "حفظ الوكالة",
+  "agenciesOpeningBalance": "الرصيد الافتتاحي: {amount}",
+  "@agenciesOpeningBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "num"
+      }
+    }
+  },
+  "recentOperationsTitle": "آخر العمليات",
+  "recentOperationsEmpty": "لا توجد عمليات بعد.",
+  "drawerDashboard": "لوحة التحكم",
+  "drawerScan": "مسح مستند",
+  "drawerManualEntry": "إضافة يدوية",
+  "drawerReports": "التقارير",
+  "drawerAgencies": "الوكالات",
+  "drawerHelp": "المساعدة",
+  "dashboardQuickActions": "الإجراءات السريعة",
+  "dashboardActionNewEntry": "قيد جديد",
+  "dashboardActionInvoice": "فاتورة",
+  "dashboardActionChart": "دليل الحسابات",
+  "dashboardActionLedger": "دفتر الأستاذ",
+  "dashboardActionArchive": "الأرشيف",
+  "dashboardActionBackup": "نسخ احتياطي",
+  "dashboardAlerts": "التنبيهات",
+  "dashboardNoAlerts": "لا توجد تنبيهات بعد",
+  "dashboardCharts": "المخططات",
+  "dashboardNoCharts": "لا توجد مخططات بعد",
+  "dashboardRecentEntries": "آخر القيود",
+  "dashboardNoRecentEntries": "لا توجد قيود بعد",
+  "dashboardNoCards": "لا توجد بطاقات للعرض",
+  "dashboardCustomize": "تخصيص اللوحة",
+  "dashboardSectionQuickActions": "إظهار الإجراءات السريعة",
+  "dashboardSectionAlerts": "إظهار التنبيهات",
+  "dashboardSectionCharts": "إظهار المخططات",
+  "dashboardSectionRecent": "إظهار آخر القيود",
+  "dashboardViewDetails": "تفاصيل: {title}",
+  "@dashboardViewDetails": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardCopyValue": "نسخ القيمة",
+  "dashboardCopyTitle": "نسخ العنوان",
+  "emptyStateNoData": "لا توجد بيانات بعد",
+  "manualEntrySaveDraft": "حفظ كمسودة",
+  "manualEntryPost": "ترحيل العملية",
+  "transactionStatusPosted": "مرحّل",
+  "transactionStatusDraft": "مسودة",
+  "agenciesOpeningBalanceDate": "تاريخ الرصيد الافتتاحي",
+  "agenciesOpeningBalanceDateInvalid": "يجب أن يكون تاريخ الرصيد الافتتاحي في 1 يناير.",
+  "pdfReviewTitle": "صفحات PDF",
+  "pdfReviewProcessing": "جاري تجهيز الصفحات واستخراج البيانات...",
+  "pdfReviewNoPages": "لا توجد صفحات في ملف PDF.",
+  "pdfReviewPageLabel": "صفحة {index}",
+  "@pdfReviewPageLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfReviewOpenEntry": "فتح الإدخال",
+  "manualEntryCurrency": "عملة الفاتورة",
+  "manualEntryExchangeRate": "سعر الصرف للعملة الأساسية",
+  "manualEntryExchangeRateRequired": "أدخل سعر صرف صحيح.",
+  "agenciesPrimaryCurrency": "العملة الأساسية",
+  "agenciesAllowedCurrencies": "العملات المسموحة",
+  "drawerSettings": "الإعدادات",
+  "settingsBackupTitle": "النسخ الاحتياطي",
+  "settingsDriveBackupToggle": "نسخ احتياطي يومي إلى Google Drive",
+  "settingsDriveBackupHint": "يرفع نسخة احتياطية في نهاية كل يوم.",
+  "settingsDriveAccountTitle": "حساب Google Drive",
+  "settingsDriveAccountSubtitle": "اربط حسابًا لحفظ النسخ الاحتياطية.",
+  "settingsDriveAccountConnected": "متصل",
+  "settingsConnect": "ربط",
+  "settingsDisconnect": "فصل",
+  "settingsLastBackup": "آخر نسخة احتياطية",
+  "settingsBackupNow": "نسخ احتياطي الآن",
+  "settingsBackupInProgress": "جارٍ النسخ...",
+  "settingsBackupFailed": "فشل النسخ الاحتياطي: {message}",
+  "@settingsBackupFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsOcrTitle": "التعرف الضوئي",
+  "settingsOcrCloudToggle": "استخدام OCR.space السحابي",
+  "settingsOcrCloudHint": "يرسل الصور إلى OCR.space لتحسين الدقة.",
+  "settingsTitle": "الإعدادات"
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
