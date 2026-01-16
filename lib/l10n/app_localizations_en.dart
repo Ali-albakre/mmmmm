@@ -315,6 +315,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manualEntryNoAgency => 'Please select an agency before saving.';
 
   @override
+  String get manualEntryAddItem => 'Add item';
+
+  @override
+  String get manualEntryItemName => 'Item name';
+
+  @override
+  String get manualEntryItemQuantity => 'Quantity';
+
+  @override
+  String get manualEntryItemUnitPrice => 'Unit price';
+
+  @override
+  String get manualEntryItemTotal => 'Total';
+
+  @override
   String get transactionTypePurchase => 'Purchase';
 
   @override

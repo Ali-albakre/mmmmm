@@ -313,6 +313,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get manualEntryNoAgency => 'يرجى اختيار وكالة قبل الحفظ.';
 
   @override
+  String get manualEntryAddItem => 'إضافة صنف';
+
+  @override
+  String get manualEntryItemName => 'اسم الصنف';
+
+  @override
+  String get manualEntryItemQuantity => 'الكمية';
+
+  @override
+  String get manualEntryItemUnitPrice => 'سعر الوحدة';
+
+  @override
+  String get manualEntryItemTotal => 'الإجمالي';
+
+  @override
   String get transactionTypePurchase => 'مشتريات';
 
   @override

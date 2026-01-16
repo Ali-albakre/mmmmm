@@ -1,5 +1,21 @@
 import 'package:mmmmm/features/settings/domain/entities/app_settings.dart';
 
+class OcrLineItem {
+  const OcrLineItem({
+    required this.name,
+    this.unit,
+    required this.quantity,
+    required this.unitPrice,
+    required this.totalPrice,
+  });
+
+  final String name;
+  final String? unit;
+  final num quantity;
+  final num unitPrice;
+  final num totalPrice;
+}
+
 class OcrResult {
   const OcrResult({
     this.invoiceNumber,
@@ -7,6 +23,7 @@ class OcrResult {
     this.totalAmount,
     this.currency,
     this.rawText,
+    this.items = const [],
   });
 
   final String? invoiceNumber;
@@ -14,6 +31,7 @@ class OcrResult {
   final num? totalAmount;
   final CurrencyCode? currency;
   final String? rawText;
+  final List<OcrLineItem> items;
 }
 
 class OcrParser {
@@ -23,12 +41,14 @@ class OcrParser {
     final date = _extractDate(normalized);
     final total = _extractTotalAmount(normalized);
     final currency = _extractCurrency(normalized);
+    final items = _extractLineItems(normalized);
     return OcrResult(
       invoiceNumber: invoice,
       date: date,
       totalAmount: total,
       currency: currency,
       rawText: text,
+      items: items,
     );
   }
 
@@ -99,8 +119,10 @@ class OcrParser {
   }
 
   static String? _firstTokenWithDigits(String line) {
-    final match = RegExp(r'([0-9A-Z][0-9A-Z\-/]{1,})', caseSensitive: false)
-        .firstMatch(line);
+    final match = RegExp(
+      r'([0-9A-Z][0-9A-Z\-/]{1,})',
+      caseSensitive: false,
+    ).firstMatch(line);
     if (match == null) {
       return null;
     }
@@ -259,5 +281,84 @@ class OcrParser {
       return CurrencyCode.yer;
     }
     return null;
+  }
+
+  static List<OcrLineItem> _extractLineItems(String text) {
+    final items = <OcrLineItem>[];
+    final lines = text.split(RegExp(r'\r?\n'));
+
+    for (final line in lines) {
+      final trimmed = line.trim();
+      if (trimmed.isEmpty) continue;
+
+      final lower = trimmed.toLowerCase();
+      if (lower.contains('total') ||
+          lower.contains('إجمالي') ||
+          lower.contains('مجموع') ||
+          lower.contains('رقم') ||
+          lower.contains('التاريخ')) {
+        continue;
+      }
+
+      final numberMatches = RegExp(
+        r'(\d+[\d,.]*)',
+      ).allMatches(trimmed).toList();
+      if (numberMatches.length >= 2) {
+        try {
+          final lastMatch = numberMatches.last;
+          final prevMatch = numberMatches[numberMatches.length - 2];
+
+          final total = _parseAmount(lastMatch.group(0));
+          final val2 = _parseAmount(prevMatch.group(0));
+
+          if (total != null && val2 != null && total > 0) {
+            final nameMatch = RegExp(r'^([^0-9]+)').firstMatch(trimmed);
+            final name = nameMatch?.group(1)?.trim() ?? 'Item';
+
+            num quantity = 1;
+            num unitPrice = total;
+
+            if (numberMatches.length >= 3) {
+              final val3 = _parseAmount(
+                numberMatches[numberMatches.length - 3].group(0),
+              );
+              if (val3 != null && val3 > 0) {
+                if ((val3 * val2 - total).abs() < 0.1) {
+                  quantity = val3;
+                  unitPrice = val2;
+                } else if ((val2 * val3 - total).abs() < 0.1) {
+                  quantity = val2;
+                  unitPrice = val3;
+                } else {
+                  quantity = val2;
+                  unitPrice = total / (quantity > 0 ? quantity : 1);
+                }
+              }
+            } else {
+              if (val2 < 50 && val2 > 0) {
+                quantity = val2;
+                unitPrice = total / quantity;
+              } else {
+                quantity = 1;
+                unitPrice = total;
+              }
+            }
+
+            if (name.length > 2) {
+              items.add(
+                OcrLineItem(
+                  name: name,
+                  quantity: quantity,
+                  unitPrice: unitPrice,
+                  totalPrice: total,
+                ),
+              );
+            }
+          }
+        } catch (_) {}
+      }
+    }
+
+    return items;
   }
 }

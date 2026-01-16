@@ -662,6 +662,36 @@ abstract class AppLocalizations {
   /// **'Please select an agency before saving.'**
   String get manualEntryNoAgency;
 
+  /// No description provided for @manualEntryAddItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get manualEntryAddItem;
+
+  /// No description provided for @manualEntryItemName.
+  ///
+  /// In en, this message translates to:
+  /// **'Item name'**
+  String get manualEntryItemName;
+
+  /// No description provided for @manualEntryItemQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get manualEntryItemQuantity;
+
+  /// No description provided for @manualEntryItemUnitPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit price'**
+  String get manualEntryItemUnitPrice;
+
+  /// No description provided for @manualEntryItemTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get manualEntryItemTotal;
+
   /// No description provided for @transactionTypePurchase.
   ///
   /// In en, this message translates to:

@@ -11,6 +11,8 @@ import 'package:mmmmm/features/transactions/domain/entities/transaction.dart';
 import 'package:mmmmm/features/transactions/presentation/controllers/transactions_controller.dart';
 import 'package:mmmmm/l10n/app_localizations.dart';
 
+const _borderColor = Color(0xFFE2E8F0);
+
 class ManualEntryScreen extends StatefulWidget {
   const ManualEntryScreen({
     super.key,
@@ -45,6 +47,7 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
   OcrResult? _ocrResult;
   String? _ocrError;
   bool _didPrefillExisting = false;
+  final List<_LineItemControllers> _lineItems = [];
 
   @override
   void initState() {
@@ -80,9 +83,26 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
     }
     _notesController.text = transaction.notes ?? '';
     _txnDate = transaction.date;
-    _dateController.text =
-        MaterialLocalizations.of(context).formatFullDate(transaction.date);
+    _dateController.text = MaterialLocalizations.of(
+      context,
+    ).formatFullDate(transaction.date);
     _transactionType = _labelForTransactionType(transaction.type, l10n);
+
+    // Pre-fill line items
+    if (_lineItems.isEmpty) {
+      for (final item in transaction.items) {
+        _lineItems.add(
+          _LineItemControllers(
+            name: item.name,
+            unit: item.unit ?? '',
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            totalPrice: item.totalPrice,
+            onUpdate: _updateTotalAmount,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -92,6 +112,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
     _exchangeRateController.dispose();
     _notesController.dispose();
     _dateController.dispose();
+    for (final item in _lineItems) {
+      item.dispose();
+    }
     super.dispose();
   }
 
@@ -102,9 +125,7 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
     final selectedCurrency = _currencyCode ?? baseCurrency;
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FC),
-      appBar: AppBar(
-        title: Text(l10n.manualEntryTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.manualEntryTitle)),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -115,7 +136,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
                 _AttachmentGallery(images: widget.attachmentImages!),
               if (widget.attachmentPdf != null)
                 _AttachmentPdf(
-                  fileName: widget.attachmentPdf!.path.split(Platform.pathSeparator).last,
+                  fileName: widget.attachmentPdf!.path
+                      .split(Platform.pathSeparator)
+                      .last,
                 ),
               const SizedBox(height: 12),
               _OcrStatusCard(
@@ -125,11 +148,35 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
                 pdfSelected: widget.attachmentPdf != null,
               ),
               const SizedBox(height: 16),
-              _SectionHeader(title: l10n.manualEntryDetailsTitle),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _SectionHeader(title: l10n.manualEntryDetailsTitle),
+                  TextButton.icon(
+                    onPressed: _addLineItem,
+                    icon: const Icon(Icons.add, size: 18),
+                    label: Text(l10n.manualEntryAddItem),
+                  ),
+                ],
+              ),
+              if (_lineItems.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                ..._lineItems.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  return _LineItemWidget(
+                    key: ObjectKey(item),
+                    controllers: item,
+                    onDelete: () => _removeLineItem(index),
+                  );
+                }),
+              ],
               const SizedBox(height: 12),
               TextFormField(
                 controller: _invoiceController,
-                decoration: InputDecoration(labelText: l10n.manualEntryInvoiceNumber),
+                decoration: InputDecoration(
+                  labelText: l10n.manualEntryInvoiceNumber,
+                ),
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -150,7 +197,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
               const SizedBox(height: 12),
               DropdownButtonFormField<CurrencyCode>(
                 initialValue: selectedCurrency,
-                decoration: InputDecoration(labelText: l10n.manualEntryCurrency),
+                decoration: InputDecoration(
+                  labelText: l10n.manualEntryCurrency,
+                ),
                 items: _allowedCurrencies()
                     .map(
                       (currency) => DropdownMenuItem(
@@ -165,8 +214,12 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _exchangeRateController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(labelText: l10n.manualEntryExchangeRate),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: l10n.manualEntryExchangeRate,
+                  ),
                   validator: (value) {
                     final parsed = num.tryParse(value ?? '');
                     if (parsed == null || parsed <= 0) {
@@ -192,17 +245,27 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _transactionType,
-                decoration: InputDecoration(labelText: l10n.manualEntryTransactionType),
-                items: [
-                  l10n.transactionTypePurchaseCredit,
-                  l10n.transactionTypePayment,
-                  l10n.transactionTypeReturn,
-                  l10n.transactionTypePurchaseCash,
-                  l10n.transactionTypeCompensation,
-                ]
-                    .map((label) => DropdownMenuItem(value: label, child: Text(label)))
-                    .toList(),
-                validator: (value) => value == null ? l10n.manualEntryTransactionTypeRequired : null,
+                decoration: InputDecoration(
+                  labelText: l10n.manualEntryTransactionType,
+                ),
+                items:
+                    [
+                          l10n.transactionTypePurchaseCredit,
+                          l10n.transactionTypePayment,
+                          l10n.transactionTypeReturn,
+                          l10n.transactionTypePurchaseCash,
+                          l10n.transactionTypeCompensation,
+                        ]
+                        .map(
+                          (label) => DropdownMenuItem(
+                            value: label,
+                            child: Text(label),
+                          ),
+                        )
+                        .toList(),
+                validator: (value) => value == null
+                    ? l10n.manualEntryTransactionTypeRequired
+                    : null,
                 onChanged: (value) => setState(() => _transactionType = value),
               ),
               const SizedBox(height: 12),
@@ -266,7 +329,8 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
   }
 
   void _prefillFromOcr(OcrResult result) {
-    if (_invoiceController.text.trim().isEmpty && result.invoiceNumber != null) {
+    if (_invoiceController.text.trim().isEmpty &&
+        result.invoiceNumber != null) {
       _invoiceController.text = result.invoiceNumber!;
     }
     if (_amountController.text.trim().isEmpty && result.totalAmount != null) {
@@ -282,6 +346,54 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
     }
     if (_currencyCode == null && result.currency != null) {
       _currencyCode = result.currency;
+    }
+    if (_lineItems.isEmpty && result.items.isNotEmpty) {
+      for (final item in result.items) {
+        _lineItems.add(
+          _LineItemControllers(
+            name: item.name,
+            unit: item.unit ?? '',
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            totalPrice: item.totalPrice,
+            onUpdate: _updateTotalAmount,
+          ),
+        );
+      }
+      _updateTotalAmount();
+    }
+  }
+
+  void _addLineItem() {
+    setState(() {
+      _lineItems.add(
+        _LineItemControllers(
+          name: '',
+          unit: '',
+          quantity: 1,
+          unitPrice: 0,
+          totalPrice: 0,
+          onUpdate: _updateTotalAmount,
+        ),
+      );
+    });
+  }
+
+  void _removeLineItem(int index) {
+    setState(() {
+      final item = _lineItems.removeAt(index);
+      item.dispose();
+      _updateTotalAmount();
+    });
+  }
+
+  void _updateTotalAmount() {
+    num total = 0;
+    for (final item in _lineItems) {
+      total += num.tryParse(item.totalPriceController.text) ?? 0;
+    }
+    if (total > 0) {
+      _amountController.text = total.toString();
     }
   }
 
@@ -308,7 +420,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
       return;
     }
     final amount = num.parse(_amountController.text.replaceAll(',', ''));
-    final amountInBase = selectedCurrency == baseCurrency ? amount : amount * exchangeRate;
+    final amountInBase = selectedCurrency == baseCurrency
+        ? amount
+        : amount * exchangeRate;
 
     final base = widget.existingTransaction;
     final transaction = Transaction(
@@ -323,12 +437,16 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
       amountInBase: amountInBase,
       exchangeRate: selectedCurrency == baseCurrency ? null : exchangeRate,
       date: _txnDate!,
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
-      source: base?.source ??
+      notes: _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
+      source:
+          base?.source ??
           ((widget.attachmentImages?.isNotEmpty ?? false)
               ? TransactionSource.ocr
               : TransactionSource.manual),
       status: status,
+      items: _lineItems.map((e) => e.toLineItem()).toList(),
     );
 
     if (base == null) {
@@ -381,7 +499,8 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
   CurrencyCode _baseCurrency() {
     final agenciesController = getIt<AgenciesController>();
     final settings = getIt<SettingsController>().settings;
-    return agenciesController.selectedAgency?.primaryCurrency ?? settings.currency;
+    return agenciesController.selectedAgency?.primaryCurrency ??
+        settings.currency;
   }
 
   List<CurrencyCode> _allowedCurrencies() {
@@ -406,7 +525,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
 
   DateTime? _parseManualDate(String value) {
     final normalized = _normalizeDigits(value);
-    final ymd = RegExp(r'(\\d{4})[./-](\\d{1,2})[./-](\\d{1,2})').firstMatch(normalized);
+    final ymd = RegExp(
+      r'(\\d{4})[./-](\\d{1,2})[./-](\\d{1,2})',
+    ).firstMatch(normalized);
     if (ymd != null) {
       final year = int.tryParse(ymd.group(1) ?? '');
       final month = int.tryParse(ymd.group(2) ?? '');
@@ -415,7 +536,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
         return DateTime.tryParse(_formatDate(year, month, day));
       }
     }
-    final dmy = RegExp(r'(\\d{1,2})[./-](\\d{1,2})[./-](\\d{4})').firstMatch(normalized);
+    final dmy = RegExp(
+      r'(\\d{1,2})[./-](\\d{1,2})[./-](\\d{4})',
+    ).firstMatch(normalized);
     if (dmy != null) {
       final day = int.tryParse(dmy.group(1) ?? '');
       final month = int.tryParse(dmy.group(2) ?? '');
@@ -455,7 +578,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
   }
 
   void _showSnack(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }
 
@@ -475,7 +600,8 @@ class _OcrStatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final hasData = ocrResult?.invoiceNumber != null ||
+    final hasData =
+        ocrResult?.invoiceNumber != null ||
         ocrResult?.totalAmount != null ||
         ocrResult?.date != null;
 
@@ -489,9 +615,9 @@ class _OcrStatusCard extends StatelessWidget {
           children: [
             Text(
               l10n.manualEntryOcrTitle,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 8),
             if (isLoading)
@@ -526,15 +652,23 @@ class _OcrStatusCard extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   if (ocrResult?.invoiceNumber != null)
-                    _InfoChip(label: l10n.manualEntryOcrInvoice(ocrResult!.invoiceNumber!)),
+                    _InfoChip(
+                      label: l10n.manualEntryOcrInvoice(
+                        ocrResult!.invoiceNumber!,
+                      ),
+                    ),
                   if (ocrResult?.date != null)
                     _InfoChip(
                       label: l10n.manualEntryOcrDate(
-                        MaterialLocalizations.of(context).formatShortDate(ocrResult!.date!),
+                        MaterialLocalizations.of(
+                          context,
+                        ).formatShortDate(ocrResult!.date!),
                       ),
                     ),
                   if (ocrResult?.totalAmount != null)
-                    _InfoChip(label: l10n.manualEntryOcrTotal(ocrResult!.totalAmount!)),
+                    _InfoChip(
+                      label: l10n.manualEntryOcrTotal(ocrResult!.totalAmount!),
+                    ),
                 ],
               )
             else
@@ -562,9 +696,9 @@ class _InfoChip extends StatelessWidget {
       child: Text(
         label,
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: const Color(0xFF3B6AF6),
-              fontWeight: FontWeight.w600,
-            ),
+          color: const Color(0xFF3B6AF6),
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -579,9 +713,9 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
     );
   }
 }
@@ -620,8 +754,9 @@ class _DatePickerField extends StatelessWidget {
               lastDate: now,
             );
             if (selected != null) {
-              controller.text =
-                  MaterialLocalizations.of(context).formatFullDate(selected);
+              controller.text = MaterialLocalizations.of(
+                context,
+              ).formatFullDate(selected);
             }
             onChanged(selected);
           },
@@ -681,6 +816,149 @@ class _AttachmentPdf extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LineItemWidget extends StatelessWidget {
+  const _LineItemWidget({
+    super.key,
+    required this.controllers,
+    required this.onDelete,
+  });
+
+  final _LineItemControllers controllers;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: _borderColor),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: TextFormField(
+                  controller: controllers.nameController,
+                  decoration: InputDecoration(
+                    labelText: l10n.manualEntryItemName,
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                onPressed: onDelete,
+                icon: const Icon(Icons.delete_outline, color: Colors.red),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: controllers.quantityController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: l10n.manualEntryItemQuantity,
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextFormField(
+                  controller: controllers.unitPriceController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: l10n.manualEntryItemUnitPrice,
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextFormField(
+                  controller: controllers.totalPriceController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: l10n.manualEntryItemTotal,
+                    isDense: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LineItemControllers {
+  _LineItemControllers({
+    required String name,
+    required String unit,
+    required num quantity,
+    required num unitPrice,
+    required num totalPrice,
+    required VoidCallback onUpdate,
+  }) : nameController = TextEditingController(text: name),
+       unitController = TextEditingController(text: unit),
+       quantityController = TextEditingController(text: quantity.toString()),
+       unitPriceController = TextEditingController(text: unitPrice.toString()),
+       totalPriceController = TextEditingController(
+         text: totalPrice.toString(),
+       ) {
+    nameController.addListener(onUpdate);
+    unitController.addListener(onUpdate);
+    quantityController.addListener(() {
+      _calculateTotal();
+      onUpdate();
+    });
+    unitPriceController.addListener(() {
+      _calculateTotal();
+      onUpdate();
+    });
+  }
+
+  final TextEditingController nameController;
+  final TextEditingController unitController;
+  final TextEditingController quantityController;
+  final TextEditingController unitPriceController;
+  final TextEditingController totalPriceController;
+
+  void _calculateTotal() {
+    final qty = num.tryParse(quantityController.text) ?? 0;
+    final price = num.tryParse(unitPriceController.text) ?? 0;
+    totalPriceController.text = (qty * price).toString();
+  }
+
+  void dispose() {
+    nameController.dispose();
+    unitController.dispose();
+    quantityController.dispose();
+    unitPriceController.dispose();
+    totalPriceController.dispose();
+  }
+
+  TransactionLineItem toLineItem() {
+    return TransactionLineItem(
+      name: nameController.text,
+      unit: unitController.text.isEmpty ? null : unitController.text,
+      quantity: num.tryParse(quantityController.text) ?? 0,
+      unitPrice: num.tryParse(unitPriceController.text) ?? 0,
+      totalPrice: num.tryParse(totalPriceController.text) ?? 0,
     );
   }
 }
